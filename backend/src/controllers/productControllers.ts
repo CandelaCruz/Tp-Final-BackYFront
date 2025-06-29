@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { Product } from "../models/productModel"
-import { email, success } from "zod/v4"
+
 
 const getAllProducts = async (req: Request, res: Response): Promise<any> => {
   try {
@@ -13,6 +13,30 @@ const getAllProducts = async (req: Request, res: Response): Promise<any> => {
   } catch (error) {
     const err = error as Error
     res.status(500).json({ success: false, message: err.message })
+  }
+}
+
+const searchProducts = async (req: Request, res: Response) :Promise<any> => {
+  const name = typeof req.query.name === "string" ? req.query.name : ""
+
+  if (!name) {
+    return res.status(400).json({
+      success: false,
+      message: "Debe enviar el nombre como string"
+    })
+  }
+
+  try {
+    const regex = new RegExp(name, "i") // búsqueda insensible a mayúsculas
+    const results = await Product.find({ name: { $regex: regex } })
+
+    res.json({ success: true, data: results })
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: "Error al buscar productos",
+      error: err.message
+    })
   }
 }
 
@@ -89,4 +113,4 @@ const updateProduct = async (req: Request, res: Response): Promise<any> => {
   }
 }
 
-export { getAllProducts, createProduct, deleteProduct, updateProduct }
+export { getAllProducts, searchProducts, createProduct, deleteProduct, updateProduct }

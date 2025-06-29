@@ -12,9 +12,26 @@ const Home = () => {
   const [error, setError] = useState(null)
   const [isEditing, setIsEditing] = useState(null)
   const [productEditing, setProductEditing] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
+
 
   const { user, logout, token } = useAuth()
 
+  const handleSearch = async () => {
+  if (!searchTerm) return fetchingProducts()
+
+  try {
+    const response = await fetch(`${API_URL}/products/search?name=${searchTerm}`)
+    const data = await response.json()
+    if (data.success) {
+      setProducts(data.data)
+    } else {
+      setError("No se encontraron productos.")
+    }
+  } catch (error) {
+    setError("Error al buscar productos.")
+  }
+}
   const fetchingProducts = async () => {
     try {
       const response = await fetch(`${API_URL}/products`)
@@ -68,6 +85,19 @@ const Home = () => {
     <Layout>
       <h1>Lista de productos</h1>
       {user && <p>Bienvenido, {user.email}</p>}
+      <div className="search-bar">
+  <input
+    type="text"
+    placeholder="Buscar producto por nombre"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+  />
+  <button onClick={handleSearch}>Buscar</button>
+  <button onClick={() => {
+    setSearchTerm("")
+    fetchingProducts()
+  }}>Ver todos</button>
+</div>
       {error && <>
         <div className="error-home">
           <h2>{error}</h2>
