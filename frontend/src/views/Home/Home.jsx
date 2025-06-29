@@ -4,6 +4,9 @@ import { Link } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext"
 import { FormUpdate } from "../../components/FormUpdate"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 const Home = () => {
   const [products, setProducts] = useState([])
   const [error, setError] = useState(null)
@@ -14,7 +17,7 @@ const Home = () => {
 
   const fetchingProducts = async () => {
     try {
-      const response = await fetch("http://localhost:1234/api/products")
+      const response = await fetch(`${API_URL}/products`)
 
       if (!response.ok) {
         setError("Sesión terminada, vuelve a loguearte.")
@@ -37,7 +40,7 @@ const Home = () => {
   const handleDelete = async (product) => {
     if (confirm("Esta seguro que quieres borrar el producto?")) {
       try {
-        const response = await fetch(`http://localhost:1234/api/products/${product._id}`, {
+        const response = await fetch(`${API_URL}/products/${product._id}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` }
         })

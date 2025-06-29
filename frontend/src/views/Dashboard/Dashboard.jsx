@@ -3,6 +3,9 @@ import { Layout } from "../../components/Layout"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 const Dashboard = () => {
   const [name, setName] = useState("")
   const [price, setPrice] = useState(0)
@@ -46,7 +49,7 @@ const Dashboard = () => {
     const newDataProduct = { name, price, category }
 
     try {
-      const response = await fetch("http://localhost:1234/api/products", {
+      const response = await fetch(`${API_URL}/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
