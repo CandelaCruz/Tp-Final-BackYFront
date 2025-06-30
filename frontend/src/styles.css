@@ -200,3 +200,21 @@ footer {
   padding: 1rem;
   text-align: center;
 }
+
+/*Search*/
+.search-bar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+}
+
+.search-bar input{
+  width: 300px;
+}
+
+.search-bar button{
+  width: 100px;
+ 
+}

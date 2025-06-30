@@ -23,9 +23,11 @@ const Home = () => {
   try {
     const response = await fetch(`${API_URL}/products/search?name=${searchTerm}`)
     const data = await response.json()
-    if (data.success) {
+    if (data.success && data.data.length > 0) {
       setProducts(data.data)
+      setError(null)
     } else {
+      setProducts([])
       setError("No se encontraron productos.")
     }
   } catch (error) {
